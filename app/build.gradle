@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 
+
 android {
     compileSdkVersion 22
     buildToolsVersion "22.0.1"
@@ -41,6 +42,38 @@ android {
     }
 }
 
+apply plugin: 'spoon'
+
+spoon {
+
+    // Enable debug output
+    debug = true
+
+    // Set custom test reports directory (defaults to "spoon")
+    baseOutputDir = file("$buildDir/custom-report-dir")
+
+    // Enable setting test class/method-to-be-run from command line. E.g.:
+    // $> ../gradlew spoonFreeDebugTest -PspoonClassName=com.stanfy.spoon.example.test.MainActivityTest -PspoonMethodName=testSetText
+    if (project.hasProperty('spoonClassName')) {
+        className = project.spoonClassName
+
+        if (project.hasProperty('spoonMethodName')) {
+            methodName = project.spoonMethodName
+        }
+    }
+
+    // You can pass instrumentation arguments. Tests in this example assert this pair is passed.
+    instrumentationArgs = ["foo=bar"]
+
+    // It's also possible to configure tests sharding using convenient properties:
+    // numShards = 2
+    // shardIndex = 0
+
+    adbTimeout = 30
+
+    codeCoverage = true
+}
+
 dependencies {
     compile 'com.android.support:appcompat-v7:22.0.0'
 
@@ -48,4 +81,6 @@ dependencies {
     androidTestCompile 'com.android.support.test:testing-support-lib:0.1'
     androidTestCompile 'info.cukes:cucumber-android:1.2.0@jar'
     androidTestCompile 'info.cukes:cucumber-picocontainer:1.2.0'
+
+    androidTestCompile "com.squareup.spoon:spoon-client:1.5.0"
 }

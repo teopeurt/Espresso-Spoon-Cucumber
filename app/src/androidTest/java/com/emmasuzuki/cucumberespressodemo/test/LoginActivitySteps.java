@@ -30,11 +30,13 @@ import com.emmasuzuki.cucumberespressodemo.R;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.junit.internal.matchers.TypeSafeMatcher;
+import org.junit.runner.RunWith;
 
 import cucumber.api.CucumberOptions;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+//import cucumber.api.junit.Cucumber;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -44,7 +46,10 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.Matchers.not;
 
-@CucumberOptions(features = "features")
+@CucumberOptions( plugin = { "pretty",
+        "html:/sdcard/report.html",
+        "json:/sdcard/cucumber.json",
+        "junit:/sdcard/cucumber.xml" }, features = "features")
 public class LoginActivitySteps extends ActivityInstrumentationTestCase2<LoginActivity> {
 
     public LoginActivitySteps(LoginActivity activityClass) {
@@ -82,9 +87,12 @@ public class LoginActivitySteps extends ActivityInstrumentationTestCase2<LoginAc
     @Then("^I should (true|false) auth error$")
     public void I_should_see_auth_error(boolean shouldSeeError) {
         if (shouldSeeError) {
-            onView(withId(R.id.error)).check(matches(isDisplayed()));
-        } else {
+
+
             onView(withId(R.id.error)).check(matches(not(isDisplayed())));
+        } else {
+
+            onView(withId(R.id.error)).check(matches(isDisplayed()));
         }
     }
 
